@@ -1,0 +1,7 @@
+﻿Name,Quantity,Component
+"U1",1," Arduino Uno R3"
+"1",1," Breadboard Small"
+"R2, R4, R5, R6, R3",5," Photoresistor"
+"SERVOyaw.Servo, SERVOpitch.Servo",2,"Positional Micro Servo"
+"R1",1,"10 kΩ Resistor"
+"SC1",1,"5 V, 100 mA Solar Cell"
