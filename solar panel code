@@ -1,0 +1,62 @@
+// C++
+//
+#include <Servo.h>
+Servo yawServo;
+Servo pitchServo;
+
+int servo_yaw_angle = 90;
+int servo_pitch_angle = 90;
+
+void setup() {
+  Serial.begin(9600);
+  yawServo.attach(9);
+  pitchServo.attach(10);
+}
+
+void loop() {
+  int top_left = analogRead(A0);
+  int top_right = analogRead(A1);
+  int bottom_left = analogRead(A2);
+  int bottom_right = analogRead(A3);
+
+  int left_light = (top_left + bottom_left) / 2;
+  int right_light = (top_right + bottom_right) / 2;
+  int up_light = (top_right + top_left) / 2;
+  int down_light = (bottom_right + bottom_left) / 2;
+
+  int deadzone = 20;
+  int difference_y_axis = up_light - down_light;
+  int difference_x_axis = left_light - right_light;
+
+  if (abs(difference_y_axis) > deadzone) {
+    int turn_size_y = abs(difference_y_axis) / 10;
+    if (difference_y_axis > 0) {
+      servo_pitch_angle += turn_size_y;
+    } else {
+      servo_pitch_angle -= turn_size_y;
+    }
+  }
+
+  if (abs(difference_x_axis) > deadzone) {
+    int turn_size_x = abs(difference_x_axis) / 10;
+    if (difference_x_axis > 0) {
+      servo_yaw_angle -= turn_size_x;
+    } else {
+      servo_yaw_angle += turn_size_x;
+    }
+  }
+
+  servo_yaw_angle = constrain(servo_yaw_angle, 0, 180);
+  servo_pitch_angle = constrain(servo_pitch_angle, 0, 180);
+
+  yawServo.write(servo_yaw_angle);
+  pitchServo.write(servo_pitch_angle);
+
+  Serial.print("Updated servo angle ");
+  Serial.print(servo_yaw_angle);
+  Serial.print("° on the x axis and ");
+  Serial.print(servo_pitch_angle);
+  Serial.println("° on the y axis");
+
+  delay(100);
+}
